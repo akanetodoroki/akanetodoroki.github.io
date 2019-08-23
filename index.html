@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<!--移动端屏幕适配-->
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" type="text/css" href="./css/canvas.css" >
+	<link rel="stylesheet" type="text/css" href="./icon/iconfont.css" >
+	<title></title>
+</head>
+<body>
+	<canvas id="cvs"></canvas>
+	<div id="setting">
+		<i class="choosecolor" style="background-color: black"></i>
+		<i class="choosecolor" style="background-color: red"></i>
+		<i class="choosecolor" style="background-color: blue"></i>
+		<i class="choosecolor" style="background-color: green"></i>
+		<i class="choosecolor" style="background-color: white"></i>
+		<i class="choosecolor" style="background-color: pink"></i>
+		<i class="choosecolor" style="background-color: yellow"></i>
+		<i class="iconfont icon-pan_icon active" id="pen"></i>
+		<i class="iconfont icon-xiangpi" id="erease"></i>
+		<i class="iconfont icon-qingkong" id="clear"></i>
+		<i class="iconfont icon-baocun" id="save"></i>
+	</div>
+	<input type="range" id="range" min="1" max="30" value="5">
+
+</body>
+<script>
+
+
+	var cvs = document.getElementById('cvs');
+	var ctx = cvs.getContext('2d');
+	//设置canvas全屏
+	// var w = window.innerWidth ||
+    //         document.documentElement.clientWidth ||
+    //         document.body.clientWidth;
+	// var h = window.innerHeight ||
+	// 		document.documentElement.clientHeight ||
+	// 		document.body.clientHeigh
+	cvs.height = document.documentElement.clientHeight ;
+	cvs.width  = document.documentElement.clientWidth ;
+	//cvs.style.border = "2px solid #000";
+	var paintBtn = document.getElementById("pen");
+	var painting = true;
+
+	cvs.onmousedown = function(e) {
+		ctx.lineCap = "round";
+		ctx.lineJoin = "round";
+
+
+		ctx.beginPath();
+
+		ctx.moveTo(e.pageX,e.pageY);
+		cvs.onmousemove = function(e){
+			if (eflag){
+				ctx.save();
+				ctx.globalCompositeOperation = "destination-out";
+				ctx.lineTo(e.pageX,e.pageY);
+				ctx.stroke();
+				ctx.closePath();
+				ctx.clip();
+				ctx.clearRect(0,0,cvs.width,cvs.height);
+				ctx.restore();
+
+			}else{
+				ctx.lineTo(e.pageX,e.pageY);
+				ctx.stroke();
+			}
+
+		}
+		cvs.onmouseup = function(e){
+			ctx.closePath();
+			cvs.onmousemove = null;
+			cvs.onmouseup   = null;
+		}
+		
+
+
+	}
+	//修改画笔颜色
+	var chagecolorBtns = document.getElementsByClassName('choosecolor');
+	for (i in chagecolorBtns){
+		chagecolorBtns[i].onclick =function(){
+			ctx.strokeStyle=this.style.backgroundColor;
+		}
+	}
+	//修改画笔大小
+	var range = document.getElementById("range");
+ 
+	range.onchange = function(){
+    	ctx.lineWidth = this.value;
+	};
+	pen.onclick = function(){
+		painting = true;
+		eflag = false;
+		this.classList.add('active');
+		erease.classList.remove('active');
+	}
+	//橡皮擦功能
+	var eflag = false;
+	var edelete = document.getElementById("erease");
+	edelete.onclick = function(){
+		eflag = true ;
+		this.classList.add("active");
+		pen.classList.remove("active");
+	}
+
+	//清空画布
+	var clearCanvas = document.getElementById("clear");
+	clearCanvas.onclick = function(){
+		ctx.clearRect(0,0,cvs.width,cvs.height);
+	}
+	//保存
+	var save=document.getElementById("save");
+	save.onclick = function(){
+		var imgurl = cvs.toDataURL('');
+		var saveA  = document.createElement("a");
+		saveA.href = imgurl;
+		saveA.download = "test" +(new Date).getTime();
+		saveA.target = "_blank";
+		saveA.click();
+	}
+
+
+
+</script>
+</html>

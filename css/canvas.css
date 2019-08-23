@@ -1,0 +1,36 @@
+*{
+    margin: 0;
+    padding:0;
+    background-color: #F7F7F7;
+}
+
+
+
+
+#setting{
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 300px;
+    height: 30px;
+}
+i{
+    width:20px;
+    height: 20px;
+    display: block;
+    float: left;
+    border-radius: 50%;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+i:hover{
+    box-shadow: 1px 1px 10px #888888;
+}
+.active{
+    box-shadow: 1px 1px 10px #888888;
+}
+input{
+    position: absolute;
+    top: 20px;
+    left: 100px;
+}
